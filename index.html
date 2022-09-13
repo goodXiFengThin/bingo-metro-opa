@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>    
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=0.7,user-scalable=no">
+        <title>正在跳转</title>
+        <script type="text/javascript">
+		var baseURL = "https://112.94.67.170:8083/go";
+		//var iOSURL = baseURL + "/manifest.plist";
+		var iOSURL = "https://gitee.com/goodXiFengThin/bingo-metro-opa/raw/master/manifest.plist";
+		//var androidURL = baseURL + "/app/GzKGCApp.apk";
+        var androidURL = "https://112.94.67.170:8083/upload/BingoLink.apk";
+
+		window.onload=function()
+		{
+			var parent = document.getElementById("downloadLinkParent");
+			var getStyle = function (element,attr) {
+				if(typeof window.getComputedStyle!='undefined')
+				{
+					return parseInt(window.getComputedStyle(element,null)[attr]);
+				}else if(element.currentStyle){
+					return parseInt(element.currentStyle[attr]);
+				}
+			}
+			var realWidth = getStyle(parent,'width') - 2*14;
+			var childNode = document.getElementById("downloadLink");
+			document.getElementById("downloadLink").style.width = realWidth+"px";
+			if(navigator.userAgent.indexOf('MicroMessenger') > -1){
+				document.getElementById("DownloadTips").style.display="block";
+			}else{
+				document.getElementById("DownloadTips").style.display="none";
+			}
+			
+			var browser = {
+				versions: function() {
+					var u = navigator.userAgent,
+					app = navigator.appVersion;
+					return {
+						 
+						trident: u.indexOf('Trident') > -1,
+						//IE内核
+						presto: u.indexOf('Presto') > -1,
+						//opera内核
+						webKit: u.indexOf('AppleWebKit') > -1,
+						//苹果、谷歌内核
+						gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,
+						//火狐内核
+						mobile: !!u.match(/AppleWebKit.*Mobile.*/) || !!u.match(/AppleWebKit/),
+						//是否为移动终端
+						ios: u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1,
+						//ios终端
+						android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+						//android终端或者uc浏览器
+						iPhone: u.indexOf('iPhone') > -1 ,
+						//是否为iPhone或者QQHD浏览器
+						iPad: u.indexOf('iPad') > -1,
+						//是否iPad
+						webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+					};
+				} (),
+				language: (navigator.browserLanguage || navigator.language).toLowerCase(),
+				useragent:navigator.userAgent,
+			}
+			document.getElementById("useragent").innerHTML=browser.useragent;
+			if (browser.versions.ios)
+			{	
+				document.getElementById("LinkBackgroundImage").style.backgroundImage="url(download/ios_bg.png)";
+				document.getElementById("DownloadTipsImage").src="download/ios_downloadTips.png";
+				iOS_install();
+			} else { 
+				android_install();
+			} 
+		}
+		function iOS_install(){
+			window.location.href = "itms-services://?action=download-manifest&url="+encodeURIComponent(iOSURL);
+		}
+		function android_install(){
+			window.location.href = androidURL;
+		}
+        </script>
+		<style type="text/css">
+			
+			
+			div#LinkBackgroundImage{
+				position:absolute;
+				top:0;
+				left:0;
+				bottom:0;
+				right:0;
+				z-index:-1;
+				background-size:100% 100%;
+				background-image:url(download/android_bg.png);
+				width:100%;
+				height:100%;
+				background-repeat:no-repeat;
+			}
+			#LinkLogo{
+				text-align:center;
+				padding-top:22%;
+			}
+			#LinkBrief{
+				text-align:center;
+				font-size:28px;
+				color:#0073c4;
+				padding-top:3%;
+			}
+			
+			#DownloadButton{
+			    text-align:center;
+				width:100%;
+				margin-top:10%;
+			}
+			#QuestionTips{
+				margin-top:2%;
+				text-align:center;
+				font-size:18px;
+				color:gray;
+			}
+			.down{
+				width:60%;
+				display:inline-block;
+				border:0;
+				padding:0;
+				margin:0;
+			}
+			
+			.down_left{
+				width:14px;
+				background:url(download/android_btn.png) no-repeat left;
+				float:left;
+				height:56px;
+				border:0;
+				padding:0;
+				margin:0;
+			}
+			.down_c{ 
+				background:#13bd27;
+			    height:56px;
+			    float:left;
+				font-size:22px;
+				color:white;
+				line-height:56px;
+				border:0;
+				padding:0;
+				margin:0;
+			}
+			.down_right{
+				width:14px;
+				background:url(download/android_btn.png) no-repeat right;
+				float:left;
+				height:56px;
+				border:0;
+				padding:0;
+				margin:0;
+			}
+			#DownloadTips{
+				position:absolute;
+				top:0;
+				left:0;
+				bottom:0;
+				right:0;
+				z-index:99999;
+			}
+			div#DownloadTips > img {
+				height:100%;
+				width:100%;
+				border:0;
+			}
+		</style>
+    </head>
+    
+    <body>
+	<div id="DownloadTips"  class="DownloadTips" style="display:none;">
+		<img src="download/android_downloadTips.png" id="DownloadTipsImage" />
+	</div>
+	<div id="LinkBackgroundImage">
+		
+		
+		<div id="LinkLogo">
+			<img src="download/logo.png" />
+		</div>
+		<div id="LinkBrief">
+			<label>
+				广州市运营监管系统
+			</label>
+		</div>
+		<div style="margin-top:180px;padding-left:5px;">
+			<div>手机版本信息</div>
+			<div id="useragent"></div>
+		</div>
+		<div id="DownloadButton" style="display:none">
+			<div class='down' id="downloadLinkParent">
+			  <span class='down_left'></span>
+			  <span class='down_c' id="downloadLink">正在下载中。。。</span>
+			  <span class='down_right'></span>
+			</div>
+		</div>
+		<div id="QuestionTips">
+			<label>
+				</br></br></br>
+			</label>
+		</div>
+	</div>
+    </body>
+
+</html>
